@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<DapperContex>();
 builder.Services.AddScoped<UserRepo>();
+builder.Services.AddScoped<TaskRepo>();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -22,6 +24,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.MapStaticAssets();
 

@@ -1,1 +1,73 @@
-﻿
+﻿@using MyTodoProject.Models
+@{
+    var role = ViewBag.Role as string;
+    var personalTasks = ViewBag.PersonalTasks;
+    var userTasks = ViewBag.UserTasks;
+}
+<div class="dashboard-container">
+    <div style="text-align:right;margin-bottom:10px;">
+        <a href="/Items/Logout" class="create-task-button">Logout</a>
+    </div>
+    <div class="dashboard-columns">
+        <div class="column">
+            <div class="column-header">
+                <h2 class="column-label">Personal Tasks</h2>
+                <button class="create-task-button" onclick="openCreateModal()">Create Task</button>
+            </div>
+            <div class="tasks-list">
+                @if (personalTasks != null)
+                {
+                    foreach (var task in personalTasks)
+                    {
+                        <div class="task-card" onclick="openTaskModal('@task.taskID','@task.title','@task.description')"><h3 class="task-title">@task.title</h3><p class="task-description">@task.description</p></div>
+                    }
+                }
+            </div>
+        </div>
+        @if (role == "admin")
+        {
+            <div class="column">
+                <div class="column-header"><h2 class="column-label">Users Tasks</h2></div>
+                <div class="tasks-list">
+                    @if (userTasks != null)
+                    {
+                        foreach (var task in userTasks)
+                        {
+                            <div class="task-card"><h3 class="task-title">@task.title</h3><p class="task-description">@task.description</p><p style="font-size:12px;color:gray;margin-top:5px;">User: @task.username</p><div style="margin-top:5px;"><a href="/Items/DeleteTask/@task.taskID" class="cancel-btn">Delete</a></div></div>
+                        }
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div id="createModal" class="modal">
+    <div class="modal-content">
+        <h2>Create Task</h2>
+        <form method="post" action="/Items/CreateTask">
+            <label>Title</label><input type="text" name="title" class="modal-input" required />
+            <label>Description</label><textarea name="description" class="modal-textarea"></textarea>
+            <div class="modal-buttons">
+                <button type="submit" class="save-btn">Create</button>
+                <button type="button" onclick="closeModal()" class="cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="taskModal" class="modal">
+    <div class="modal-content">
+        <h2>Edit Task</h2>
+        <form method="post" action="/Items/UpdateTask">
+            <input type="hidden" id="taskID" name="taskID" />
+            <label>Title</label><input id="modalTitle" name="title" class="modal-input" />
+            <label>Description</label><textarea id="modalDesc" name="description" class="modal-textarea"></textarea>
+            <div class="modal-buttons">
+                <button type="submit" class="save-btn">Save</button>
+                <a id="deleteBtn" class="cancel-btn"></a>
+                <button type="button" onclick="closeModal()" class="cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+<link rel="stylesheet" href="~/css/AdminDashboard.css" asp-append-version="true" />
+<script src="~/js/Dashboard.js"></script>

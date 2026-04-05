@@ -20,8 +20,5 @@ namespace MyTodoProject.Repo
             using var connection = _context.CreateConnection();
             return connection.Query<Users>(query, new { username, password }).FirstOrDefault();
         }
-
-       
-
     }
 }
